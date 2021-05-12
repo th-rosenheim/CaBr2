@@ -25,7 +25,7 @@ tauri-build = { version = "1.0.0-beta-rc.0" }
 
 [dependencies]
 cabr2_config = { path = "./cabr2_config/" }
-cabr2_load_save = { path = "./cabr2_load_save/", features = ["beryllium", "cabr2"] }
+cabr2_load_save = { path = "./cabr2_load_save/", features = ["beryllium", "cabr2", "pdf"] }
 cabr2_logger = { path = "./cabr2_logger/" }
 cabr2_search = { path = "./cabr2_search/", features = [ "tauri_plugin", "gestis" ] }
 log = "0.4.14"
