@@ -75,8 +75,8 @@ pub struct LoadSave<M: Params> {
 }
 
 impl<M: Params> LoadSave<M> {
-  pub fn new(_provider_mapping: ProviderMapping) -> Self {
-    init_handlers(_provider_mapping);
+  pub fn new(provider_mapping: ProviderMapping) -> Self {
+    init_handlers(provider_mapping);
     LoadSave {
       invoke_handler: Box::new(tauri::generate_handler![
         save_document,
