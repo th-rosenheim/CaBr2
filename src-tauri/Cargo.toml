@@ -31,7 +31,7 @@ default = [
   "cabr2",
   "pdf",
   "gestis",
-  "tauri_app",
+  # "tauri_app",
 ]
 portable = [ "cabr2_config/portable" ]
 custom-protocol = [ "tauri/custom-protocol" ] # needed for tauri release builds
@@ -59,9 +59,14 @@ members = [
   "cabr2_load_save",
   "cabr2_logger",
   "cabr2_search",
+  "cabr2_wasm_lib",
 ]
 
 [profile.release]
 panic = "abort"
 codegen-units = 1
 lto = true
+
+[profile.release.package.cabr2_wasm_lib]
+opt-level = "s"
+codegen-units = 1

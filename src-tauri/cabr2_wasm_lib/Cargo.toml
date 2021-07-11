@@ -1,0 +1,21 @@
+[package]
+name = "cabr2_wasm_lib"
+version = "0.3.0"
+authors = [
+  "crapStone <crapstone01@gmail.com>",
+]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+cabr2_load_save = { path = "../cabr2_load_save/" }
+cabr2_types = { path = "../cabr2_types/" }
+console_error_panic_hook = {version = "0.1.6", optional = true}
+serde_json = "1.0.64"
+wasm-bindgen = "0.2.74"
+
+[features]
+default = ["cabr2_load_save/beryllium"]
+debug_build = ["console_error_panic_hook"]
