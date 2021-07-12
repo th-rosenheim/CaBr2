@@ -15,15 +15,27 @@ lazy_static! {
     Arc::new(Mutex::new(HashMap::new()));
 }
 
-pub async fn init_providers() {
+pub async fn init_providers() -> Result<()> {
   #[cfg(feature = "gestis")]
-  let agent = ureq::AgentBuilder::new()
+  let agent = reqwest::blocking::ClientBuilder::new()
     .user_agent(&format!("cabr2/v{}", env!("CARGO_PKG_VERSION")))
-    .build();
+    .build()?;
 
   let mut _providers = REGISTERED_PROVIDERS.lock().await;
   #[cfg(feature = "gestis")]
   _providers.insert("gestis", Box::new(crate::gestis::Gestis::new(agent)));
+
+  Ok(())
+}
+
+pub fn get_provider_mapping() -> HashMap<String, String> {
+  let providers = REGISTERED_PROVIDERS.lock().unwrap();
+  let mut mapping = HashMap::new();
+  for (id, provider) in providers.iter() {
+    mapping.insert(id.to_string(), provider.get_name());
+  }
+
+  mapping
 }
 
 pub async fn get_available_providers() -> Result<Vec<ProviderInfo>> {

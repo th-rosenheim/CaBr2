@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/tauri';
+import { environment } from '../../../environments/environment';
 
 export enum LogLevel {
   TRACE = 'TRACE',
@@ -8,15 +8,62 @@ export enum LogLevel {
   ERROR = 'ERROR',
 }
 
-const log = (level: LogLevel, path: string, ...messages: any[]): void => {
-  invoke('plugin:cabr2_logger|log', {
-    level,
-    path,
-    messages,
-  })
-    .then((stuff) => console.log(stuff))
-    .catch((err) => console.error(err));
+const createLog = () => {
+  if (environment.web) {
+    return (level: LogLevel, path: string, ...messages: any[]) => {
+      let fn;
+      let prefix;
+      switch (level) {
+        case LogLevel.TRACE:
+          fn = console.log;
+          prefix = '[TRACE]';
+          break;
+
+        case LogLevel.DEBUG:
+          fn = console.log;
+          prefix = '[DEBUG]';
+          break;
+
+        case LogLevel.INFO:
+          fn = console.log;
+          prefix = '[INFO]';
+          break;
+
+        case LogLevel.WARNING:
+          fn = console.warn;
+          prefix = '[WARNING]';
+          break;
+
+        case LogLevel.ERROR:
+          fn = console.error;
+          prefix = '[ERROR]';
+          break;
+      }
+
+      fn(prefix, path, ...messages);
+    };
+  }
+  else {
+    let invoke = async (cmd: string, args: any): Promise<any> => {
+      // defer actual logging until module finished loading
+      setTimeout(() => {
+        invoke(cmd, args).catch((err) => console.error(err));
+      }, 1);
+    };
+    import('@tauri-apps/api/tauri').then((tauri) => invoke = tauri.invoke);
+
+    return (level: LogLevel, path: string, ...messages: any[]) => {
+      invoke('plugin:cabr2_logger|log', {
+        level,
+        path,
+        messages,
+      })
+        .catch((err) => console.error(err));
+    };
+  }
 };
+
+const log = createLog();
 
 /**
  * This class provides methods that call the logging functions in the backend.

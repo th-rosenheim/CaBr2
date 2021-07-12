@@ -1,10 +1,11 @@
-use std::collections::HashMap;
+use std::env;
 
 use wasm_bindgen::prelude::*;
 
 use cabr2_load_save::wasm::CaBr2Document;
+use cabr2_search::types::ProviderInfo;
 
-pub type Result<T> = std::result::Result<T, JsValue>;
+type Result<T> = std::result::Result<T, JsValue>;
 
 #[wasm_bindgen]
 extern "C" {
@@ -17,7 +18,10 @@ pub fn init() {
   #[cfg(feature = "debug_build")]
   console_error_panic_hook::set_once();
 
-  cabr2_load_save::wasm::init(HashMap::new())
+  // must be initialized first
+  cabr2_search::wasm::init();
+
+  cabr2_load_save::wasm::init(cabr2_search::wasm::get_provider_mapping())
 }
 
 /// Converts a CaBr2Document into a binary array that can be saved by the client.
@@ -64,6 +68,24 @@ pub fn get_available_document_types() -> Result<String> {
   };
 
   match serde_json::to_string(&types) {
+    Ok(res) => Ok(res),
+    Err(err) => Err(JsValue::from(err.to_string())),
+  }
+}
+
+#[wasm_bindgen]
+pub fn get_program_version() -> String {
+  env!("CARGO_PKG_VERSION").to_string()
+}
+
+#[wasm_bindgen]
+pub fn get_available_providers() -> Result<String> {
+  let providers = match cabr2_search::wasm::get_available_providers() {
+    Ok(providers) => providers,
+    Err(err) => return Err(JsValue::from(err.to_string())),
+  };
+
+  match serde_json::to_string(&providers) {
     Ok(res) => Ok(res),
     Err(err) => Err(JsValue::from(err.to_string())),
   }

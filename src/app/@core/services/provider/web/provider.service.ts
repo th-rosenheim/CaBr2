@@ -1,3 +1,7 @@
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { first } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+
 import {
   Provider,
   ProviderMapping,
@@ -5,10 +9,10 @@ import {
   SearchResult,
   SearchType,
   SearchTypeMapping,
+  searchTypes,
 } from '../provider.model';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { get_available_providers } from 'cabr2_wasm';
+import { GlobalModel } from 'src/app/@core/models/global.model';
 import { IProviderService } from '../provider.interface';
 import { SubstanceData } from 'src/app/@core/models/substances.model';
 
@@ -22,8 +26,18 @@ export class ProviderService implements IProviderService {
   providerMappingsSubject = new BehaviorSubject<ProviderMapping>(new Map());
   providerMappingsObservable = this.providerMappingsSubject.asObservable();
 
+  constructor(private globals: GlobalModel) {
+    this.globals.localizedStringsObservable.subscribe((strings) =>
+      this.searchTypeMappingsSubject.next(searchTypes.map((t) => ({ viewValue: strings.search.types[t], value: t }))),
+    );
+
+    this.getAvailableProviders()
+      .pipe(first())
+      .subscribe((providers) => this.providerMappingsSubject.next(new Map(providers.map((p) => [p.identifier, p]))));
+  }
+
   getAvailableProviders(): Observable<Provider[]> {
-    throw new Error('Method not implemented.');
+    return of(JSON.parse(get_available_providers()));
   }
   searchSuggestions(provider: string, searchType: SearchType, query: string): Observable<string[]> {
     throw new Error('Method not implemented.');

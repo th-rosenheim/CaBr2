@@ -12,7 +12,9 @@
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "build:web": "ng build -c production,web",
-    "build:release": "ng build --prod && tauri build"
+    "build:release": "ng build --configuration production && tauri build",
+    "wasm_lib:debug": "cd src-tauri/cabr2_wasm_lib && wasm-pack build --out-dir ../../cabr2_wasm --dev -- --features debug_build",
+    "wasm_lib:release": "cd src-tauri/cabr2_wasm_lib && wasm-pack build --out-dir ../../cabr2_wasm --release"
   },
   "private": true,
   "dependencies": {

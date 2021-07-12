@@ -29,6 +29,9 @@ pub enum SearchError {
   #[error("more values than expected")]
   Multiple(String),
 
+  #[cfg(feature = "gestis")]
+  #[error("reqwest error")]
+  ReqwestError(#[from] reqwest::Error),
   #[error("parsing json failed")]
   JsonError(#[from] serde_json::Error),
   #[cfg(feature = "gestis")]

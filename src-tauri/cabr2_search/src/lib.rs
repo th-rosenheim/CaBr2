@@ -4,10 +4,12 @@
 
 mod error;
 pub mod handler;
-mod types;
+pub mod types;
 
 #[cfg(feature = "gestis")]
 mod gestis;
 
 #[cfg(feature = "tauri_plugin")]
 pub mod plugin;
+#[cfg(feature = "wasm")]
+pub mod wasm;

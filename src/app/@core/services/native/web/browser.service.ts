@@ -1,10 +1,14 @@
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 
+import { init } from 'cabr2_wasm';
+import Logger from 'src/app/@core/utils/logger';
+
 import { INativeService } from '../native.interface';
-import Logger from '../../../utils/logger';
 
 const logger = new Logger('service.browser');
+
+init();
 
 const logCall = (name: string) => logger.error('called inaccessible tauri service: [', name, ']');
 
@@ -16,9 +20,10 @@ export class BrowserService implements INativeService {
   }
 
   open(_?: any): Observable<string | string[]> {
-    const inputField = new HTMLInputElement();
+    const inputField = document.createElement('input');
+    inputField.type = 'file';
     inputField.style.display = 'none';
-    document.append(inputField);
+    document.body.append(inputField);
 
     return new Observable((sub) => {
       inputField.addEventListener(

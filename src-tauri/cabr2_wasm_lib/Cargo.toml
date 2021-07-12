@@ -10,12 +10,14 @@ edition = "2018"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-cabr2_load_save = { path = "../cabr2_load_save/" }
+cabr2_load_save = { path = "../cabr2_load_save/", features = ["wasm"] }
+cabr2_search = { path = "../cabr2_search/", features = ["wasm"] }
 cabr2_types = { path = "../cabr2_types/" }
 console_error_panic_hook = {version = "0.1.6", optional = true}
 serde_json = "1.0.64"
-wasm-bindgen = "0.2.74"
+wasm-bindgen = { version = "0.2.74", features = ["serde-serialize"] }
+wasm-bindgen-futures = "0.4.24"
 
 [features]
-default = ["cabr2_load_save/beryllium"]
+default = ["cabr2_load_save/beryllium", "cabr2_search/gestis"]
 debug_build = ["console_error_panic_hook"]
