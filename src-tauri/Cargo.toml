@@ -22,7 +22,7 @@ cabr2_load_save = { path = "./cabr2_load_save/" }
 cabr2_logger = { path = "./cabr2_logger/", optional = true }
 cabr2_search = { path = "./cabr2_search/" }
 log = "0.4.14"
-tauri = { version = "1.0.0-beta.4", features = ["api-all"], optional = true }
+tauri = { version = "1.0.0-beta.5", features = ["api-all"], optional = true }
 
 [features]
 default = [
