@@ -11,3 +11,5 @@ mod gestis;
 
 #[cfg(feature = "tauri_plugin")]
 pub mod plugin;
+#[cfg(feature = "webserver")]
+pub mod webserver;

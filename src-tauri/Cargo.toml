@@ -23,6 +23,8 @@ cabr2_logger = { path = "./cabr2_logger/", optional = true }
 cabr2_search = { path = "./cabr2_search/" }
 log = "0.4.14"
 tauri = { version = "1.0.0-beta.4", features = ["api-all"], optional = true }
+tokio = { version = "1.8.1", features = ["macros", "rt-multi-thread"], optional = true }
+warp = { version = "0.3.1", optional = true }
 
 [features]
 default = [
@@ -32,17 +34,25 @@ default = [
   "pdf",
   "gestis",
   "tauri_app",
+  # "webserver",
 ]
 portable = [ "cabr2_config/portable" ]
 custom-protocol = [ "tauri/custom-protocol" ] # needed for tauri release builds
 tauri_app = [
   "tauri",
-  "cabr2_logger",
+  "cabr2_logger/tauri_plugin",
   "cabr2_config/tauri_plugin",
   "cabr2_load_save/tauri_plugin",
   "cabr2_search/tauri_plugin",
 ]
-webserver = [ ]
+webserver = [
+  "warp",
+  "tokio",
+  "cabr2_logger",
+  "cabr2_config/webserver",
+  "cabr2_load_save/webserver",
+  "cabr2_search/webserver",
+]
 
 # cabr2_load_save file types
 beryllium = [ "cabr2_load_save/beryllium" ]

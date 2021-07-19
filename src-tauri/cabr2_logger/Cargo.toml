@@ -15,6 +15,10 @@ cabr2_types = { path = "../cabr2_types/" }
 chrono = "0.4.19"
 fern = "0.6.0"
 log = "0.4.14"
-serde = { version = "1.0.126", features = ["derive"] }
-serde_json = "1.0.64"
-tauri = { version = "1.0.0-beta.4", default-features = false }
+serde = { version = "1.0.126", features = ["derive"], optional = true }
+serde_json = { version = "1.0.64", optional = true }
+tauri = { version = "1.0.0-beta.4", default-features = false, optional = true }
+
+[features]
+tauri_plugin = ["serde", "serde_json", "tauri"]
+default = []
