@@ -10,7 +10,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-cabr2_config = { path = "../cabr2_config/" }
+cabr2_config = { path = "../cabr2_config/", optional = true }
 cabr2_types = { path = "../cabr2_types/" }
 chrono = { version = "0.4.19", optional = true }
 handlebars = { version = "4.1.0", optional = true }
@@ -29,6 +29,7 @@ wkhtmltopdf = { version = "0.4.0", optional = true }
 [features]
 beryllium = ["chrono", "quick-xml", "regex"]
 cabr2 = ["serde_json"]
-pdf = ["chrono", "handlebars", "lopdf", "serde_json", "wkhtmltopdf"]
+pdf = ["cabr2_config", "chrono", "handlebars", "lopdf", "serde_json", "wkhtmltopdf"]
 tauri_plugin = ["tauri", "serde_json"]
-default = []
+wasm = []
+default = ["wasm"]

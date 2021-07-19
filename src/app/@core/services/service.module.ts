@@ -1,3 +1,4 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { BrowserService } from './native/web/browser.service';
@@ -18,11 +19,11 @@ import { TauriService } from './native/tauri.service';
 import { LoadSaveService as WebLoadSaveService } from './loadSave/web/loadSave.service';
 import { ProviderService as WebProviderService } from './provider/web/provider.service';
 
-const configFactory = (nativeService: INativeService): IConfigService => {
+const configFactory = (nativeService: INativeService, sanitizer: DomSanitizer): IConfigService => {
   if (environment.web) {
     return new ConfigWebService();
   } else {
-    return new ConfigService(nativeService);
+    return new ConfigService(nativeService, sanitizer);
   }
 };
 
@@ -52,7 +53,7 @@ const nativeFactory = (): INativeService => {
 
 const providerFactory = (nativeService: INativeService, globals: GlobalModel): IProviderService => {
   if (environment.web) {
-    return new WebProviderService();
+    return new WebProviderService(globals);
   } else {
     return new ProviderService(nativeService, globals);
   }
@@ -62,7 +63,7 @@ const providerFactory = (nativeService: INativeService, globals: GlobalModel): I
     {
       provide: IConfigService,
       useFactory: configFactory,
-      deps: [INativeService],
+      deps: [INativeService, DomSanitizer],
     },
     {
       provide: II18nService,
@@ -85,4 +86,4 @@ const providerFactory = (nativeService: INativeService, globals: GlobalModel): I
     },
   ],
 })
-export class ServiceModule {}
+export class ServiceModule { }

@@ -47,14 +47,11 @@ export class GlobalModel {
   ghsSymbolsSubject = new BehaviorSubject<GHSSymbols>(new Map<string, string>());
   ghsSymbolsObservable = this.ghsSymbolsSubject.asObservable();
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer) { }
 
   setGHSSymbols(newSymbols: GHSSymbols) {
-    // newSymbols is just an object
-    new Map(Object.entries(newSymbols)).forEach((value, key) => {
-      this.ghsSymbols.set(key, this.sanitizer.bypassSecurityTrustResourceUrl(value));
-      this.ghsSymbolKeys.push(key);
-    });
+    this.ghsSymbols = newSymbols;
+    this.ghsSymbolKeys = Array.from(newSymbols.keys());
 
     this.ghsSymbolKeys.sort();
   }

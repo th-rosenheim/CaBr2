@@ -94,6 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.configService.getHazardSymbols().subscribe(
         (symbols) => this.global.setGHSSymbols(symbols),
         (err) => {
+          console.error(err);
           logger.error('loading ghs-symbols failed:', err);
           this.alertService.error(this.strings.error.getHazardSymbols);
         },

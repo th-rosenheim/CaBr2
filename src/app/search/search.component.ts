@@ -64,6 +64,7 @@ export class SearchComponent implements OnInit {
     });
 
     this.providerService.providerMappingsObservable.subscribe((providerMap) => {
+      logger.debug(providerMap);
       this.providerMapping = providerMap;
       this.providers = Array.from(providerMap.values()).filter((provider) => provider.identifier !== 'custom');
     });
